@@ -23,6 +23,10 @@ enum Directions {
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+
+//TODO: add rotate border check
+void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
+void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
 void SetStartCoordinates();
 void RotateImage(float angle, Directions direction);
 void MoveUp();
@@ -33,13 +37,11 @@ void SetWindowSize(HWND hwnd);
 bool IsSpriteInBorders(Directions direction);
 
 Gdiplus::PointF coordinates[4];
-Gdiplus::Image* image;
+
 UINT imageHeight;
 UINT imageWidth;
 float imageCenterX;
 float imageCenterY;
-//HFONT hfnt = NULL;
-//LPWSTR szCaption = NULL;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
@@ -98,9 +100,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
-        image = Gdiplus::Image::FromFile(L"Pictures/horse.png");
-        imageHeight = image->GetHeight();
-        imageWidth = image->GetWidth();
+        //Gdiplus::Bitmap image(L"Pictures/ewa.bmp");
+        imageHeight = 100;//image.GetHeight();
+        imageWidth = 100;//image.GetWidth();
         SetStartCoordinates();
     }
     return 0;
@@ -181,74 +183,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
-        /*RECT rc;
-        HDC hdcMem;
-        HBITMAP hbmMem, hbmOld;
-        HBRUSH hbrBkGnd;
-        HFONT hfntOld = NULL;
-        */
-
-
 
         HDC hdc = BeginPaint(hwnd, &ps);
 
-        /*GetClientRect(hwnd, &rc);
-        hdcMem = CreateCompatibleDC(ps.hdc);
-
-        hbmMem = CreateCompatibleBitmap(ps.hdc,
-            rc.right - rc.left,
-            rc.bottom - rc.top);
-
-        hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
-
-        hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
-        FillRect(hdcMem, &rc, hbrBkGnd);
-        DeleteObject(hbrBkGnd);
-
-        if (hfnt) {
-            hfntOld =(HFONT) SelectObject(hdcMem, hfnt);
-        }
-
-        //
-        // Render the image into the offscreen DC.
-        //
-
-        SetBkMode(hdcMem, TRANSPARENT);
-        SetTextColor(hdcMem, GetSysColor(COLOR_WINDOWTEXT));
-        DrawText(hdcMem,
-            szCaption,
-            -1,
-            &rc,
-            DT_CENTER);
-
-        if (hfntOld) {
-            SelectObject(hdcMem, hfntOld);
-        }
-
-        //
-        // Blt the changes to the screen DC.
-        //
-
-        BitBlt(ps.hdc,
-            rc.left, rc.top,
-            rc.right - rc.left, rc.bottom - rc.top,
-            hdcMem,
-            0, 0,
-            SRCCOPY);
-
-        //
-        // Done with off-screen bitmap and DC.
-        //
-
-        SelectObject(hdcMem, hbmOld);
-        DeleteObject(hbmMem);
-        DeleteDC(hdcMem);*/
-
-        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-
-        Gdiplus::Graphics graphics(hdc);
-
-        graphics.DrawImage(image, coordinates, 3);
+        DoubleBufferPaint(hwnd, hdc, ps);
 
         EndPaint(hwnd, &ps);
     }
@@ -332,7 +270,7 @@ void MoveUp() {
 
 void SetWindowSize(HWND hwnd) {
     RECT rect = {};
-    GetWindowRect(hwnd, &rect);
+    GetClientRect(hwnd, &rect);
     windowSize.width = rect.right - rect.left;
     windowSize.height = rect.bottom - rect.top;
 }
@@ -397,4 +335,46 @@ void SetStartCoordinates() {
     coordinates[3].Y = 0 + imageHeight;
     imageCenterX = 0 + imageWidth / 2;
     imageCenterY = 0 + imageHeight / 2;
+}
+
+void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps) {
+    FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+
+    Gdiplus::Graphics graphics(hdc);
+
+    Gdiplus::Image* image = Gdiplus::Image::FromFile(L"Pictures/horse.png");
+
+    graphics.DrawImage(image, coordinates, 3);
+}
+
+void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps)
+{
+    RECT rc;
+    HDC hdcMem;
+    HBITMAP hbmMem, hbmOld;
+
+    hdcMem = CreateCompatibleDC(ps.hdc);
+    hbmMem = CreateCompatibleBitmap(ps.hdc, windowSize.width, windowSize.height);
+    hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
+
+    GetClientRect(hwnd, &rc);
+
+    FillRect(hdcMem, &rc, (HBRUSH)(COLOR_WINDOW));
+
+    Gdiplus::Graphics graphics(hdcMem);
+
+    Gdiplus::Bitmap image(L"Pictures/sprite.bmp");
+
+    graphics.DrawImage(&image, coordinates, 3);
+
+    BitBlt(ps.hdc,
+            rc.left, rc.top,
+            rc.right - rc.left, rc.bottom - rc.top,
+            hdcMem,
+            rc.left, rc.top,
+            SRCCOPY);
+
+    SelectObject(hdcMem, hbmOld);
+    DeleteObject(hbmMem);
+    DeleteDC(hdcMem);
 }
