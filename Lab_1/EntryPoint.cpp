@@ -1,11 +1,13 @@
-#include <windows.h>
+#include<windows.h>
 #include<stdlib.h>
 #include<gdiplus.h>
 #include<math.h>
 #pragma comment(lib, "gdiplus.lib")
 
-#define ROTATE_ANGLE 0.005f;
-#define STEP_SIZE 1;
+const double ROTATE_ANGLE = 0.005;
+const int STEP_SIZE = 5;
+const int MIN_WINDOW_WIDTH = 400;
+const int MIN_WINDOW_HEIGHT = 400;
 
 struct WindowSize {
     int height;
@@ -24,7 +26,6 @@ enum Directions {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-//TODO: add rotate border check
 void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
 void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
 void SetStartCoordinates();
@@ -37,11 +38,11 @@ void SetWindowSize(HWND hwnd);
 bool IsSpriteInBorders(Directions direction);
 
 Gdiplus::PointF coordinates[4];
-
 UINT imageHeight;
 UINT imageWidth;
 float imageCenterX;
 float imageCenterY;
+bool isFirstCall = true;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
@@ -56,6 +57,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
+    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszClassName = CLASS_NAME;
 
     RegisterClass(&wc);
@@ -63,10 +67,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
     HWND hwnd = CreateWindowEx(
         0,
         CLASS_NAME,
-        L"Learn to Program Windows",
+        L"OSaSP Lab_1",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-
         NULL,
         NULL,
         hInstance,
@@ -89,21 +92,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
     }
 
     Gdiplus::GdiplusShutdown(gdiplusToken);
-
     return (int)msg.wParam;
 }
 
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    LPMINMAXINFO lpMMI;
+
     switch (uMsg)
     {
     case WM_CREATE:
     {
-        //Gdiplus::Bitmap image(L"Pictures/ewa.bmp");
-        imageHeight = 100;//image.GetHeight();
-        imageWidth = 100;//image.GetWidth();
-        SetStartCoordinates();
+
     }
     return 0;
 
@@ -161,14 +161,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
         case VK_TAB:
         {
-            float angle = ROTATE_ANGLE;
-            RotateImage(angle, Positive);
+            RotateImage(ROTATE_ANGLE, Positive);
         }
         break;
         case VK_SPACE:
         {
-            float angle = ROTATE_ANGLE;
-            RotateImage(angle, Negative);
+            RotateImage(ROTATE_ANGLE, Negative);
         }
         }
 
@@ -185,9 +183,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
 
         HDC hdc = BeginPaint(hwnd, &ps);
-
         DoubleBufferPaint(hwnd, hdc, ps);
-
         EndPaint(hwnd, &ps);
     }
     return 0;
@@ -197,8 +193,19 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         SetWindowSize(hwnd);
     }
     return 0;
+
+    case WM_GETMINMAXINFO:
+    {
+        lpMMI = (LPMINMAXINFO)lParam;
+        lpMMI->ptMinTrackSize.x = MIN_WINDOW_WIDTH;
+        lpMMI->ptMinTrackSize.y = MIN_WINDOW_HEIGHT;
     }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    return 0;
+
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
+
 }
 
 void RotateImage(float angle, Directions direction) {
@@ -207,18 +214,22 @@ void RotateImage(float angle, Directions direction) {
     {
     case Positive:
     {
-        for (int i = 0; i < 4; i++) {
-            coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) - (coordinates[i].Y - imageCenterY) * sin(angle);
-            coordinates[i].Y = imageCenterY + (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
+        if (IsSpriteInBorders(Positive)) {
+            for (int i = 0; i < 4; i++) {
+                coordinates[i].X = imageCenterX + ((double)coordinates[i].X - imageCenterX) * cos(angle) - ((double)coordinates[i].Y - imageCenterY) * sin(angle);
+                coordinates[i].Y = imageCenterY + ((double)coordinates[i].X - imageCenterX) * sin(angle) + ((double)coordinates[i].Y - imageCenterY) * cos(angle);
+            }
         }
     }
     break;
 
     case Negative:
     {
-        for (int i = 0; i < 4; i++) {
-            coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) + (coordinates[i].Y - imageCenterY) * sin(angle);
-            coordinates[i].Y = imageCenterY - (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
+        if (IsSpriteInBorders(Negative)) {
+            for (int i = 0; i < 4; i++) {
+                coordinates[i].X = imageCenterX + ((double)coordinates[i].X - imageCenterX) * cos(angle) + ((double)coordinates[i].Y - imageCenterY) * sin(angle);
+                coordinates[i].Y = imageCenterY - ((double)coordinates[i].X - imageCenterX) * sin(angle) + ((double)coordinates[i].Y - imageCenterY) * cos(angle);
+            }
         }
     }
     break;
@@ -229,42 +240,38 @@ void RotateImage(float angle, Directions direction) {
 
 void MoveRight() {
     if (IsSpriteInBorders(Right)) {
-        coordinates[0].X += 1;
-        coordinates[1].X += 1;
-        coordinates[2].X += 1;
-        coordinates[3].X += 1;
-        imageCenterX += 1;
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].X += STEP_SIZE;
+        }
+        imageCenterX += STEP_SIZE;
     }
 }
 
 void MoveLeft() {
     if (IsSpriteInBorders(Left)) {
-        coordinates[0].X -= 1;
-        coordinates[1].X -= 1;
-        coordinates[2].X -= 1;
-        coordinates[3].X -= 1;
-        imageCenterX -= 1;
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].X -= STEP_SIZE;
+        }
+        imageCenterX -= STEP_SIZE;
     }
 }
 
 void MoveDown() {
     if (IsSpriteInBorders(Down)) {
-        coordinates[0].Y += 1;
-        coordinates[1].Y += 1;
-        coordinates[2].Y += 1;
-        coordinates[3].Y += 1;
-        imageCenterY += 1;
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].Y += STEP_SIZE;
+        }
+        imageCenterY += STEP_SIZE;
     }
 }
 
 void MoveUp() {
     if (IsSpriteInBorders(Up))
     {
-        coordinates[0].Y -= 1;
-        coordinates[1].Y -= 1;
-        coordinates[2].Y -= 1;
-        coordinates[3].Y -= 1;
-        imageCenterY -= 1;
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].Y -= STEP_SIZE;
+        }
+        imageCenterY -= STEP_SIZE;
     }
 }
 
@@ -292,7 +299,7 @@ bool IsSpriteInBorders(Directions direction) {
     case Down:
     {
         for (int i = 0; i < 4; i++) {
-            if (coordinates[i].Y + 1 + 35 > windowSize.height) {
+            if (coordinates[i].Y + 1 > windowSize.height) {
                 isMovePossible = false;
             }
         }
@@ -318,6 +325,32 @@ bool IsSpriteInBorders(Directions direction) {
         }
     }
     break;
+
+    case Positive:
+    {
+        for (int i = 0; i < 4; i++) {
+            double tempX = imageCenterX + ((double)coordinates[i].X - imageCenterX) * cos(ROTATE_ANGLE) - ((double)coordinates[i].Y - imageCenterY) * sin(ROTATE_ANGLE);
+            double tempY = imageCenterY + ((double)coordinates[i].X - imageCenterX) * sin(ROTATE_ANGLE) + ((double)coordinates[i].Y - imageCenterY) * cos(ROTATE_ANGLE);
+            if ((tempX < 0) || (tempX > windowSize.width) || (tempY < 0) || (tempY > windowSize.height)) {
+                isMovePossible = false;
+            }
+        }
+    }
+    break;
+
+    case Negative:
+    {
+        for (int i = 0; i < 4; i++) {
+            double tempX = imageCenterX + ((double)coordinates[i].X - imageCenterX) * cos(ROTATE_ANGLE) + ((double)coordinates[i].Y - imageCenterY) * sin(ROTATE_ANGLE);
+            double tempY = imageCenterY - ((double)coordinates[i].X - imageCenterX) * sin(ROTATE_ANGLE) + ((double)coordinates[i].Y - imageCenterY) * cos(ROTATE_ANGLE);
+            if ((tempX < 0) || (tempX > windowSize.width) || (tempY < 0) || (tempY > windowSize.height)) {
+                isMovePossible = false;
+            }
+        }
+        
+    }
+    break;
+
     }
 
     return isMovePossible;
@@ -327,14 +360,14 @@ bool IsSpriteInBorders(Directions direction) {
 void SetStartCoordinates() {
     coordinates[0].X = 0;
     coordinates[0].Y = 0;
-    coordinates[1].X = 0 + imageWidth;
+    coordinates[1].X = imageWidth;
     coordinates[1].Y = 0;
-    coordinates[2].Y = 0 + imageHeight;
+    coordinates[2].Y = imageHeight;
     coordinates[2].X = 0;
-    coordinates[3].X = 0 + imageWidth;
-    coordinates[3].Y = 0 + imageHeight;
-    imageCenterX = 0 + imageWidth / 2;
-    imageCenterY = 0 + imageHeight / 2;
+    coordinates[3].X = imageWidth;
+    coordinates[3].Y = imageHeight;
+    imageCenterX = imageWidth / 2;
+    imageCenterY = imageHeight / 2;
 }
 
 void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps) {
@@ -343,6 +376,13 @@ void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps) {
     Gdiplus::Graphics graphics(hdc);
 
     Gdiplus::Image* image = Gdiplus::Image::FromFile(L"Pictures/horse.png");
+
+    if (isFirstCall) {
+        imageHeight = image->GetHeight();
+        imageWidth = image->GetWidth();
+        SetStartCoordinates();
+        isFirstCall = false;
+    }
 
     graphics.DrawImage(image, coordinates, 3);
 }
@@ -363,7 +403,14 @@ void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps)
 
     Gdiplus::Graphics graphics(hdcMem);
 
-    Gdiplus::Bitmap image(L"Pictures/sprite.bmp");
+    Gdiplus::Bitmap image(L"Pictures/horse.png");
+
+    if (isFirstCall) {
+        imageHeight = image.GetHeight();
+        imageWidth = image.GetWidth();
+        SetStartCoordinates();
+        isFirstCall = false;
+    }
 
     graphics.DrawImage(&image, coordinates, 3);
 
