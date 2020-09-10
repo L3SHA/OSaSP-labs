@@ -1,0 +1,12 @@
+﻿  EntryPoint.cpp
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(282,98): warning C4244: =: преобразование "double" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(283,98): warning C4244: =: преобразование "double" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(291,98): warning C4244: =: преобразование "double" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(292,98): warning C4244: =: преобразование "double" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(401,26): warning C4244: =: преобразование "UINT" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(403,26): warning C4244: =: преобразование "UINT" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(405,26): warning C4244: =: преобразование "UINT" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(406,26): warning C4244: =: преобразование "UINT" в "Gdiplus::REAL", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(407,22): warning C4244: =: преобразование "UINT" в "float", возможна потеря данных
+C:\5 semester\OSaSP\Lab_1\Lab_1\EntryPoint.cpp(408,22): warning C4244: =: преобразование "UINT" в "float", возможна потеря данных
+  Lab_1.vcxproj -> C:\5 semester\OSaSP\Lab_1\Lab_1\Debug\Lab_1.exe
