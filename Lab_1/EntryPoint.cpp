@@ -12,7 +12,7 @@ struct WindowSize {
     int width;
 } windowSize;
 
-enum Directions{
+enum Directions {
     Up,
     Down,
     Left,
@@ -59,16 +59,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
     RegisterClass(&wc);
 
     HWND hwnd = CreateWindowEx(
-        0,                              
-        CLASS_NAME,                     
-        L"Learn to Program Windows",    
-        WS_OVERLAPPEDWINDOW,          
+        0,
+        CLASS_NAME,
+        L"Learn to Program Windows",
+        WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        NULL,         
-        NULL,       
-        hInstance,  
-        NULL        
+        NULL,
+        NULL,
+        hInstance,
+        NULL
     );
 
     if (hwnd == NULL)
@@ -96,200 +96,200 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_CREATE:
-        {
-            image = Gdiplus::Image::FromFile(L"horse.png");
-            imageHeight = image->GetHeight();
-            imageWidth = image->GetWidth();
-            SetStartCoordinates();
-        }
-        return 0;
+    case WM_CREATE:
+    {
+        image = Gdiplus::Image::FromFile(L"horse.png");
+        imageHeight = image->GetHeight();
+        imageWidth = image->GetWidth();
+        SetStartCoordinates();
+    }
+    return 0;
 
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-        }
-        return 0;
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+    }
+    return 0;
 
-        case WM_MOUSEWHEEL:
-        {
-            if (GET_KEYSTATE_WPARAM(wParam) == MK_SHIFT) {
-                if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-                    MoveRight();
-                }
-                else {
-                    MoveLeft();
-                }
+    case WM_MOUSEWHEEL:
+    {
+        if (GET_KEYSTATE_WPARAM(wParam) == MK_SHIFT) {
+            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+                MoveRight();
             }
             else {
-                if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
-                    MoveUp();
-                }
-                else {
-                    MoveDown();
-                }
+                MoveLeft();
             }
-            InvalidateRect(hwnd, NULL, TRUE);
         }
-        return 0;
+        else {
+            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0) {
+                MoveUp();
+            }
+            else {
+                MoveDown();
+            }
+        }
+        InvalidateRect(hwnd, NULL, TRUE);
+    }
+    return 0;
 
-        case WM_KEYDOWN:
+    case WM_KEYDOWN:
+    {
+        switch (wParam)
         {
-            switch (wParam) 
-            {
-                case VK_UP:
-                {
-                    MoveUp();
-                }
-                break;
-                case VK_DOWN:
-                {
-                    MoveDown();
-                }
-                break;
-                case VK_RIGHT:
-                {
-                    MoveRight();
-                }
-                break;
-                case VK_LEFT:
-                {
-                    MoveLeft();
-                }
-                break;
-                case VK_TAB:
-                {
-                    float angle = ROTATE_ANGLE;
-                    RotateImage(angle, Positive);
-                }
-                break;
-                case VK_SPACE:
-                {
-                    float angle = ROTATE_ANGLE;
-                    RotateImage(angle, Negative);
-                }
-            }
-
-            InvalidateRect(hwnd, NULL, FALSE);
-
-        }
-        return 0;
-    
-        case WM_ERASEBKGND:
-            return (LRESULT)1;
-
-        case WM_PAINT:
+        case VK_UP:
         {
-            PAINTSTRUCT ps;
-            /*RECT rc;
-            HDC hdcMem;
-            HBITMAP hbmMem, hbmOld;
-            HBRUSH hbrBkGnd;
-            HFONT hfntOld = NULL;
-            */
-            
-
-
-            HDC hdc = BeginPaint(hwnd, &ps);    
-
-            /*GetClientRect(hwnd, &rc);
-            hdcMem = CreateCompatibleDC(ps.hdc);
-
-            hbmMem = CreateCompatibleBitmap(ps.hdc,
-                rc.right - rc.left,
-                rc.bottom - rc.top);
-
-            hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
-
-            hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
-            FillRect(hdcMem, &rc, hbrBkGnd);
-            DeleteObject(hbrBkGnd);
-
-            if (hfnt) {
-                hfntOld =(HFONT) SelectObject(hdcMem, hfnt);
-            }
-
-            //
-            // Render the image into the offscreen DC.
-            //
-
-            SetBkMode(hdcMem, TRANSPARENT);
-            SetTextColor(hdcMem, GetSysColor(COLOR_WINDOWTEXT));
-            DrawText(hdcMem,
-                szCaption,
-                -1,
-                &rc,
-                DT_CENTER);
-
-            if (hfntOld) {
-                SelectObject(hdcMem, hfntOld);
-            }
-
-            //
-            // Blt the changes to the screen DC.
-            //
-
-            BitBlt(ps.hdc,
-                rc.left, rc.top,
-                rc.right - rc.left, rc.bottom - rc.top,
-                hdcMem,
-                0, 0,
-                SRCCOPY);
-
-            //
-            // Done with off-screen bitmap and DC.
-            //
-
-            SelectObject(hdcMem, hbmOld);
-            DeleteObject(hbmMem);
-            DeleteDC(hdcMem);*/
-
-            FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
-
-            Gdiplus::Graphics graphics(hdc);
-
-           graphics.DrawImage(image, coordinates, 3);
-
-            EndPaint(hwnd, &ps);
+            MoveUp();
         }
-        return 0;
-
-        case WM_SIZE:
+        break;
+        case VK_DOWN:
         {
-            SetWindowSize(hwnd);
+            MoveDown();
         }
-        return 0;
+        break;
+        case VK_RIGHT:
+        {
+            MoveRight();
+        }
+        break;
+        case VK_LEFT:
+        {
+            MoveLeft();
+        }
+        break;
+        case VK_TAB:
+        {
+            float angle = ROTATE_ANGLE;
+            RotateImage(angle, Positive);
+        }
+        break;
+        case VK_SPACE:
+        {
+            float angle = ROTATE_ANGLE;
+            RotateImage(angle, Negative);
+        }
+        }
+
+        InvalidateRect(hwnd, NULL, FALSE);
+
+    }
+    return 0;
+
+    case WM_ERASEBKGND:
+        return (LRESULT)1;
+
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        /*RECT rc;
+        HDC hdcMem;
+        HBITMAP hbmMem, hbmOld;
+        HBRUSH hbrBkGnd;
+        HFONT hfntOld = NULL;
+        */
+
+
+
+        HDC hdc = BeginPaint(hwnd, &ps);
+
+        /*GetClientRect(hwnd, &rc);
+        hdcMem = CreateCompatibleDC(ps.hdc);
+
+        hbmMem = CreateCompatibleBitmap(ps.hdc,
+            rc.right - rc.left,
+            rc.bottom - rc.top);
+
+        hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
+
+        hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
+        FillRect(hdcMem, &rc, hbrBkGnd);
+        DeleteObject(hbrBkGnd);
+
+        if (hfnt) {
+            hfntOld =(HFONT) SelectObject(hdcMem, hfnt);
+        }
+
+        //
+        // Render the image into the offscreen DC.
+        //
+
+        SetBkMode(hdcMem, TRANSPARENT);
+        SetTextColor(hdcMem, GetSysColor(COLOR_WINDOWTEXT));
+        DrawText(hdcMem,
+            szCaption,
+            -1,
+            &rc,
+            DT_CENTER);
+
+        if (hfntOld) {
+            SelectObject(hdcMem, hfntOld);
+        }
+
+        //
+        // Blt the changes to the screen DC.
+        //
+
+        BitBlt(ps.hdc,
+            rc.left, rc.top,
+            rc.right - rc.left, rc.bottom - rc.top,
+            hdcMem,
+            0, 0,
+            SRCCOPY);
+
+        //
+        // Done with off-screen bitmap and DC.
+        //
+
+        SelectObject(hdcMem, hbmOld);
+        DeleteObject(hbmMem);
+        DeleteDC(hdcMem);*/
+
+        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+
+        Gdiplus::Graphics graphics(hdc);
+
+        graphics.DrawImage(image, coordinates, 3);
+
+        EndPaint(hwnd, &ps);
+    }
+    return 0;
+
+    case WM_SIZE:
+    {
+        SetWindowSize(hwnd);
+    }
+    return 0;
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 void RotateImage(float angle, Directions direction) {
-   
+
     switch (direction)
     {
-        case Positive:
-        {
-            for (int i = 0; i < 4; i++) {
-                coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) - (coordinates[i].Y - imageCenterY) * sin(angle);
-                coordinates[i].Y = imageCenterY + (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
-            }
+    case Positive:
+    {
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) - (coordinates[i].Y - imageCenterY) * sin(angle);
+            coordinates[i].Y = imageCenterY + (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
         }
-        break;
+    }
+    break;
 
-        case Negative:
-        {
-            for (int i = 0; i < 4; i++) {
-                coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) + (coordinates[i].Y - imageCenterY) * sin(angle);
-                coordinates[i].Y = imageCenterY - (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
-            }
+    case Negative:
+    {
+        for (int i = 0; i < 4; i++) {
+            coordinates[i].X = imageCenterX + (coordinates[i].X - imageCenterX) * cos(angle) + (coordinates[i].Y - imageCenterY) * sin(angle);
+            coordinates[i].Y = imageCenterY - (coordinates[i].X - imageCenterX) * sin(angle) + (coordinates[i].Y - imageCenterY) * cos(angle);
         }
-        break;
+    }
+    break;
     }
 
-    
+
 }
 
-void MoveRight() {  
+void MoveRight() {
     if (IsSpriteInBorders(Right)) {
         coordinates[0].X += 1;
         coordinates[1].X += 1;
@@ -341,45 +341,45 @@ bool IsSpriteInBorders(Directions direction) {
     bool isMovePossible = true;
     switch (direction)
     {
-        case Up:
-        {
-            for (int i = 0; i < 4; i++) {
-                if (coordinates[i].Y - 1 < 0) {
-                    isMovePossible = false;
-                }
+    case Up:
+    {
+        for (int i = 0; i < 4; i++) {
+            if (coordinates[i].Y - 1 < 0) {
+                isMovePossible = false;
             }
         }
-        break;
+    }
+    break;
 
-        case Down:
-        {
-            for (int i = 0; i < 4; i++) {
-                if (coordinates[i].Y + 1 + 35 > windowSize.height) {
-                    isMovePossible = false;
-                }
+    case Down:
+    {
+        for (int i = 0; i < 4; i++) {
+            if (coordinates[i].Y + 1 + 35 > windowSize.height) {
+                isMovePossible = false;
             }
         }
-        break;
+    }
+    break;
 
-        case Left:
-        {
-            for (int i = 0; i < 4; i++) {
-                if (coordinates[i].X - 1 < 0) {
-                    isMovePossible = false;
-                }
+    case Left:
+    {
+        for (int i = 0; i < 4; i++) {
+            if (coordinates[i].X - 1 < 0) {
+                isMovePossible = false;
             }
         }
-        break;
+    }
+    break;
 
-        case Right:
-        {
-            for (int i = 0; i < 4; i++) {
-                if (coordinates[i].X + 1 > windowSize.width) {
-                    isMovePossible = false;
-                }
+    case Right:
+    {
+        for (int i = 0; i < 4; i++) {
+            if (coordinates[i].X + 1 > windowSize.width) {
+                isMovePossible = false;
             }
         }
-        break;
+    }
+    break;
     }
 
     return isMovePossible;
