@@ -1,9 +1,24 @@
-#include<windows.h>
+﻿#include<windows.h>
 #include<stdlib.h>
 #include<gdiplus.h>
 #include<math.h>
 #pragma comment(lib, "gdiplus.lib")
 
+#define DEFAULT_WINDOW_WIDTH 800
+#define DEFAULT_WINDOW_HEIGHT 600
+
+#define IDM_HELP 0x00
+#define IDM_AUTHOR 0x01
+
+#define HELP_MENU_ITEM_TITLE L"Help"
+#define AUTHOR_MENU_ITEM_TITLE L"Author"
+
+#define TEXT_HELP L"Use MOUSE WHEEL and SHIFT or ARROW KEYS to move object.\r\nUse Tab and Space to rotate object."
+#define TEXT_ABOUT_AUTHOR L"Kashirskiy Alexei\r\nStudent group ¹851005\r\nhttps://github.com/L3SHA"
+
+#define SPRITE_PATH L"Pictures/horse.png"
+
+const wchar_t CLASS_NAME[] = L"Sample Window Class";
 const double ROTATE_ANGLE = 0.005;
 const int STEP_SIZE = 5;
 const int MIN_WINDOW_WIDTH = 400;
@@ -25,7 +40,7 @@ enum Directions {
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-
+void AddMenu(HWND hwnd);
 void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
 void Paint(HWND hwnd, HDC hdc, PAINTSTRUCT ps);
 void SetStartCoordinates();
@@ -43,15 +58,14 @@ UINT imageWidth;
 float imageCenterX;
 float imageCenterY;
 bool isFirstCall = true;
+HMENU hMenu;
+HMENU hObjectTypeSubMenu;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     ULONG_PTR gdiplusToken;
     Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
-
-
-    const wchar_t CLASS_NAME[] = L"Sample Window Class";
 
     WNDCLASS wc = { };
 
@@ -69,7 +83,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
         CLASS_NAME,
         L"OSaSP Lab_1",
         WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+        CW_USEDEFAULT, CW_USEDEFAULT, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT,
         NULL,
         NULL,
         hInstance,
@@ -103,7 +117,20 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
+        AddMenu(hwnd);
+    }
+    return 0;
 
+    case WM_COMMAND:
+    {
+        switch (wParam) {
+        case IDM_HELP:
+            MessageBox(hwnd, TEXT_HELP, HELP_MENU_ITEM_TITLE, MB_OK);
+            break;
+        case IDM_AUTHOR:
+            MessageBox(hwnd, TEXT_ABOUT_AUTHOR, AUTHOR_MENU_ITEM_TITLE, MB_OK);
+            break;
+        }
     }
     return 0;
 
@@ -206,6 +233,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
+}
+
+void AddMenu(HWND hwnd)
+{
+    hMenu = CreateMenu();
+    hObjectTypeSubMenu = CreatePopupMenu();
+    AppendMenu(hMenu, MF_STRING, IDM_HELP, HELP_MENU_ITEM_TITLE);
+    AppendMenu(hMenu, MF_STRING, IDM_AUTHOR, AUTHOR_MENU_ITEM_TITLE);
+    SetMenu(hwnd, hMenu);
 }
 
 void RotateImage(float angle, Directions direction) {
@@ -403,7 +439,7 @@ void DoubleBufferPaint(HWND hwnd, HDC hdc, PAINTSTRUCT ps)
 
     Gdiplus::Graphics graphics(hdcMem);
 
-    Gdiplus::Bitmap image(L"Pictures/horse.png");
+    Gdiplus::Bitmap image(SPRITE_PATH);
 
     if (isFirstCall) {
         imageHeight = image.GetHeight();
