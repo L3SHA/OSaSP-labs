@@ -38,8 +38,8 @@ UINT imageHeight;
 UINT imageWidth;
 float imageCenterX;
 float imageCenterY;
-HFONT hfnt = NULL;
-LPWSTR szCaption = NULL;
+//HFONT hfnt = NULL;
+//LPWSTR szCaption = NULL;
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow)
 {
@@ -177,15 +177,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     
         case WM_ERASEBKGND:
             return (LRESULT)1;
-
-        case WM_SETFONT:
-            hfnt = (HFONT)wParam;
-            break;
-
-        case WM_SETTEXT:
-            lstrcpy(szCaption, (LPWSTR)lParam);
-            InvalidateRect(hwnd, NULL, TRUE);
-            break;
 
         case WM_PAINT:
         {
