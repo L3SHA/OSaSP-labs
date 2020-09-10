@@ -2,4 +2,4 @@
 *.vcxproj.filters
 *.vcxproj.user
 *.sln
-/Debug
+Debug/
