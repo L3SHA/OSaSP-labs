@@ -98,7 +98,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
-        image = Gdiplus::Image::FromFile(L"horse.png");
+        image = Gdiplus::Image::FromFile(L"Pictures/horse.png");
         imageHeight = image->GetHeight();
         imageWidth = image->GetWidth();
         SetStartCoordinates();
