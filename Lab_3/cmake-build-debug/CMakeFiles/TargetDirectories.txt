@@ -1,0 +1,8 @@
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/dynamic-import.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/remote_entry.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/library.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/static-import.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/injector.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/5 semester/OSaSP/Lab_3/cmake-build-debug/CMakeFiles/injected.dir

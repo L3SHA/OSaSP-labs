@@ -9,9 +9,15 @@
 
 #define IDM_HELP 0x00
 #define IDM_AUTHOR 0x01
+#define IDM_COLORS 0x02
+
+#define IDM_COLOR_RED 0x021
+#define IDM_COLOR_BLUE 0x022
+#define IDM_COLOR_GREEN 0x023
 
 #define HELP_MENU_ITEM_TITLE L"Help"
 #define AUTHOR_MENU_ITEM_TITLE L"Author"
+#define COLORS_MENU_ITEM_TITLE L"Colors"
 
 #define TEXT_HELP L"Use MOUSE WHEEL and SHIFT or ARROW KEYS to move object.\r\nUse Tab and Space to rotate object."
 #define TEXT_ABOUT_AUTHOR L"Kashirskiy Alexei\r\nStudent group ¹851005\r\nhttps://github.com/L3SHA"
@@ -19,7 +25,7 @@
 #define SPRITE_PATH L"Pictures/horse.png"
 
 const wchar_t CLASS_NAME[] = L"Sample Window Class";
-const double ROTATE_ANGLE = 0.005;
+const double ROTATE_ANGLE = 0.5;
 const int STEP_SIZE = 5;
 const int MIN_WINDOW_WIDTH = 400;
 const int MIN_WINDOW_HEIGHT = 400;
@@ -239,8 +245,10 @@ void AddMenu(HWND hwnd)
 {
     hMenu = CreateMenu();
     hObjectTypeSubMenu = CreatePopupMenu();
+    //AppendMenu(hObjectTypeSubMenu, MF_STRING, );
     AppendMenu(hMenu, MF_STRING, IDM_HELP, HELP_MENU_ITEM_TITLE);
     AppendMenu(hMenu, MF_STRING, IDM_AUTHOR, AUTHOR_MENU_ITEM_TITLE);
+    AppendMenu(hMenu, MF_STRING, IDM_COLORS, COLORS_MENU_ITEM_TITLE);
     SetMenu(hwnd, hMenu);
 }
 

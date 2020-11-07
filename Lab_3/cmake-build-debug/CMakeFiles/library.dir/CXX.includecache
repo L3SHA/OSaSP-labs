@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/5 semester/OSaSP/Lab_3/library/library.cpp
+windows.h
+-
+library.h
+C:/5 semester/OSaSP/Lab_3/library/library.h
+stdio.h
+-
+
+C:/5 semester/OSaSP/Lab_3/library/library.h
+
