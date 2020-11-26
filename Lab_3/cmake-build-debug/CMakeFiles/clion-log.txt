@@ -1,18 +1,12 @@
-"C:\Program Files\JetBrains\CLion 2020.2.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" "C:\5 semester\OSaSP\Lab_3"
--- The C compiler identification is MSVC 19.26.28806.0
--- The CXX compiler identification is MSVC 19.26.28806.0
--- Check for working C compiler: C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.26.28801/bin/Hostx86/x86/cl.exe
--- Check for working C compiler: C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.26.28801/bin/Hostx86/x86/cl.exe - works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Check for working CXX compiler: C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.26.28801/bin/Hostx86/x86/cl.exe
--- Check for working CXX compiler: C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.26.28801/bin/Hostx86/x86/cl.exe - works
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done
--- Generating done
--- Build files have been written to: C:/5 semester/OSaSP/Lab_3/cmake-build-debug
+Visual Studio not found at: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community Configure
+
+Cannot get compiler information:
+	Cannot load Visual C++ environment from C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat:
+	command [cmd.exe, /c, call, C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat, x86, &&, C:\Program Files\JetBrains\CLion 2020.2.4\jbr\bin\java, -cp, C:\Program Files\JetBrains\CLion 2020.2.4\lib\util.jar, com.intellij.util.ReadEnv, C:\Users\Xiaomi\AppData\Local\Temp\intellij-cmd-env.2302142099444053023.tmp, ||, exit, /B, %ERRORLEVEL%]
+		exit code:255 text:0 out:ЌҐЇаҐ¤ўЁ¤Ґ­­®Ґ Ї®пў«Ґ­ЁҐ: \Android\android-sdk\tools.
+	Cannot load Visual C++ environment from C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat:
+	command [cmd.exe, /c, call, C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat, x86, &&, C:\Program Files\JetBrains\CLion 2020.2.4\jbr\bin\java, -cp, C:\Program Files\JetBrains\CLion 2020.2.4\lib\util.jar, com.intellij.util.ReadEnv, C:\Users\Xiaomi\AppData\Local\Temp\intellij-cmd-env.5916406726602445181.tmp, ||, exit, /B, %ERRORLEVEL%]
+		exit code:255 text:0 out:ЌҐЇаҐ¤ўЁ¤Ґ­­®Ґ Ї®пў«Ґ­ЁҐ: \Android\android-sdk\tools.
+	Cannot load Visual C++ environment from C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat:
+	command [cmd.exe, /c, call, C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat, x86, &&, C:\Program Files\JetBrains\CLion 2020.2.4\jbr\bin\java, -cp, C:\Program Files\JetBrains\CLion 2020.2.4\lib\util.jar, com.intellij.util.ReadEnv, C:\Users\Xiaomi\AppData\Local\Temp\intellij-cmd-env.12812457722960172356.tmp, ||, exit, /B, %ERRORLEVEL%]
+		exit code:255 text:0 out:ЌҐЇаҐ¤ўЁ¤Ґ­­®Ґ Ї®пў«Ґ­ЁҐ: \Android\android-sdk\tools.
